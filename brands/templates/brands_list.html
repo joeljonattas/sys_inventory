@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Sys_Inventory - Fabricantes
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/styles_apps/styles_apps_list.css' %}">
+
+<div class="container-fluid mt-3">
+
+    <div class="table-responsive bg-white">
+        <div class="border-bottom">
+            <h3 class="display-7">Lista de Fabricantes</h3>
+        </div>
+    
+        <div class="input-group d-flex mb-3 altura-input">
+            <div class="col-md-4">
+                <form method="get" action="{%url 'brands_list'%}">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="search" placeholder="Buscar Fabricante..." value="{{ request.GET.name }}">
+                        <button class="btn btn-primary color" type="submit">Buscar</button>
+                    </div>
+                </form>
+            </div>
+    
+            <div class="ms-auto">
+                <a href="{%url 'brands_create'%}" class="btn btn-success ">
+                    <i class="bi bi-plus"></i> Adicionar Fabricante
+                </a>
+            </div>
+        </div>
+    
+        <table class="table table-striped">
+            <thead class="">
+                <tr>
+                    <th>Fabricante</th>
+                    <th>Descrição</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for brand in brands %}
+                    <tr>
+                        <td>{{ brand.name }}</td>
+                        <td>{{ brand.description }}</td>
+                        <td>
+
+                            <a href="{% url 'brands_update' brand.id %}" class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+
+                            <a href="{% url 'brands_delete' brand.id %}" class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+    
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% include 'components/_pagination.html' %}
+
+{% endblock %}

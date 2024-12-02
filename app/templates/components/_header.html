@@ -1,0 +1,22 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+<div class="row shadow-header">
+  <div class="col-12 color-header altura-header d-flex align-items-center shadow-sm p-3">
+      <a class="navbar-brand text-white fs-3 fw-bold" href="#">Sys_Inventory</a>
+
+      <div class="dropdown ms-auto">
+        <span class="dropdown-toggle text-white fs-4 fw-semibold" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Olá, {{user}}
+        </span>
+        {% if user.is_authenticated %}
+          <form action="{% url 'logout' %}" method="post" id="logout-form">
+            {% csrf_token %}
+            <button type="submit" class="dropdown-menu color-header">
+              <li><a class="dropdown-item text-white color-header"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
+            </button>
+          </form>
+        {% endif %}
+      </div>
+  </div>
+</div>

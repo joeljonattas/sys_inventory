@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Sys_Inventory - Categorias
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/styles_apps/styles_apps_delete.css' %}">
+
+<div class="container-fluid mt-4">
+    <div class="border-bottom">
+        <h3 class="display-7">Excluir Categoria</h3>
+    </div>
+
+
+    <div class="d-flex justify-content-center cima">
+        <div class="card border-danger text-center w-75 centralizar sombra">
+            <div class="card-header border-danger bg-danger-white">
+                <h3 class="text-white fw-semibold">Atenção!</h3>
+            </div>
+            <div class="card-body">
+                <p class="card-text fs-5"> Tem certeza que deseja exluir a categoria <strong>{{ object.name }}?</strong></p>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Excluir</button>
+                </form>
+            </div>
+            <div class="card-footer border-danger bg-danger-white">
+                <p class="text-white fw-semibold">Ao excluir a categoria, seus dados não poderão ser recuperados.</p>
+            </div>
+        </div> 
+    </div>
+
+
+    <div class="d-flex justify-content-center baixo-div">
+        <a href="{%url 'categories_list'%}" class="btn btn-dark ">Voltar para a Lista de Categorias</a>
+    </div>
+</div>
+
+{% endblock %}

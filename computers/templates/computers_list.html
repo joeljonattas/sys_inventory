@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Sys_Inventory - Computadores
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/styles_apps/styles_apps_list.css' %}">
+
+<div class="container-fluid mt-3">
+
+    <div class="table-responsive">
+        <div class="input-group border-bottom">
+            <h3 class="display-7">Lista de Computadores</h3>
+
+            <div class="ms-auto">
+                <button class="btn btn-secondary me-md-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasImport" aria-controls="offcanvasImport"><i class="bi bi-download"></i> Importar</button>
+                <div class="offcanvas offcanvas-end w-50" tabindex="-1" id="offcanvasImport" aria-labelledby="offcanvasRightLabel">
+
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasRightLabel">Importar</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+
+                    <div class="offcanvas-body">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Guia de Importação de Dados</h4>
+                            </div>
+                            <div class="card-body">
+                                <p>Para garantir que os dados sejam importados corretamente, siga as instruções abaixo:</p>
+                                
+                                <h5>1. Formato do Arquivo</h5>
+                                <p>Você pode importar arquivos nos formatos <strong>CSV</strong> ou <strong>XLSX</strong>.</p>
+                                <p>Certifique-se de que o arquivo contenha os cabeçalhos corretos. Veja abaixo os campos esperados:</p>
+                                
+                                <ul>
+                                    <li><strong>modelo</strong> - Modelo do computador</li>
+                                    <li><strong>fabricante</strong> - Fabricante do computador</li>
+                                    <li><strong>categoria</strong> - Categoria do computador</li>
+                                    <li><strong>numero_serie</strong> - Número de série/TAG do computador(deve ser único)</li>
+                                    <li><strong>status</strong> - Status do computador</li>
+                                    <li><strong>processador</strong> - Modelo do processador computador. Exemplo:  Intel i5 12ª.</li>
+                                    <li><strong>memoria_ram</strong> - Quantidade de memória RAM do computador. Exemplo: 12GB.</li>
+                                    <li><strong>armazenamento</strong> - Capacidade de armazenamento do computador, especificando se é SSD ou HDD. Exemplo: 256GB SSD.</li>
+                                    <li><strong>valor</strong> - Valor do computador</li>
+                                    <li><strong>descricao</strong> - Descrição do computador (opcional)</li>
+                                </ul>
+                        
+                                <h5>2. Regras para Preenchimento</h5>
+                                <ul>
+                                    <li>O campo <strong>numero_serie</strong> deve ser único. Não utilize valores duplicados.</li>
+                                    <li>O campo <strong>modelo</strong> deve ser preenchido obrigatoriamente.</li>
+                                    <li>O campo <strong>valor</strong> deve ser preenchido obrigatoriamente.</li>
+                                    <li>O campo <strong>fabricante</strong> deve corresponder a uma fabricante válida do sistema. Utilize as fabricantes cadastradas.</li>
+                                    <li>O campo <strong>categoria</strong> deve corresponder a uma categoria válido do sistema. Utilize as categorias cadastradas.</li>
+                                    <li>O campo <strong>status</strong> deve corresponder a um status válido do sistema. Utilize os status cadastrados.</li>
+                                    <li>O campo <strong>descricao</strong> é opcional.</li>
+                                    <li>Os campos <strong>processador,</strong> <strong>memoria_ram,</strong> e <strong>armazenamento</strong> são opcionais.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+
+                        <form method="post" enctype="multipart/form-data" action="{%url 'computers_import'%}">
+                            {% csrf_token %}
+                            <label class="form-label mt-2 mb-1" for="customFile">Buscar arquivo</label>
+                            <input type="file" class="form-control" id="customFile" name="importData" />
+                            <p class="mt-3 mb-1">Informe o formato do arquivo</p>
+                            <select name="file-format" class="form-control mb-3 mt-1">
+                                <option selected>Escolha um formato...</option>
+                                <option>CSV</option>
+                                <option>XLSX</option>
+                            </select>
+                            <button class="btn btn-primary" type="submit">Importar</button>
+                          </form>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExport" aria-controls="offcanvasExport"><i class="bi bi-upload"></i> Exportar</button>
+                <div class="offcanvas offcanvas-end w-50" tabindex="-1" id="offcanvasExport" aria-labelledby="offcanvasRightLabel">
+
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasRightLabel">Exportar</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+
+                    <div class="offcanvas-body">
+                        <form method="post" enctype="multipart/form-data" action="{% url 'computers_export' %}">
+                            {% csrf_token %}
+                            <p class="mb-1">Filtrar</p>
+                            <div class="input-group mb-3">
+                                <select class="form-select" name="category">
+                                    <option value="" {% if not request.GET.category %} selected {% endif %}>Categorias</option>
+                                    {% for category in categories %}
+                                        <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:'s' %} selected {% endif %}>{{ category.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <select class="form-select" name="stat">
+                                    <option value="" {% if not request.GET.stat %} selected {% endif %}>Status</option>
+                                    {% for stat in status %}
+                                        <option value="{{ stat.0 }}" {% if request.GET.stat == stat.0|stringformat:'s' %} selected {% endif %}>{{ stat.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <p class="mb-1">Escolha o formato do arquivo.</p>
+                            <select name="file-format" class="form-control mb-3 mt-1">
+                                <option selected>Escolher formato...</option>
+                                <option>CSV</option>
+                                <option>XLSX (Excel)</option>
+                              </select>
+                            <button class="btn btn-primary" type="submit">Exportar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="input-group d-flex mb-3 mt-3">
+            <div class="col-md-5">
+                <form method="get" action="{%url 'computers_list'%}">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="search" placeholder="Busque pelo Nome, Modelo ou Número de série" value="{{ request.GET.model }}">
+                        <button class="btn btn-primary color" type="submit">Buscar</button>
+                    </div>
+                </form>
+            </div>
+    
+            <div class="ms-auto">
+                <a href="{% url 'computers_create' %}" class="btn btn-success ">
+                    <i class="bi bi-plus"></i> Adicionar Computador
+                </a>
+            </div>
+        </div>
+
+        <div class="espaco-baixo">
+            <form method="get" action="{% url 'computers_list' %}">
+                <div class="input-group w-50">
+                    <select class="form-select" name="brand">
+                        <option value="" {% if not request.GET.brand %} selected {% endif %}>Fabricantes</option>
+                        {% for brand in brands %}
+                            <option value="{{ brand.id }}" {% if request.GET.brand == brand.id|stringformat:'s' %} selected {% endif %}>{{ brand.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <select class="form-select" name="category">
+                        <option value="" {% if not request.GET.category %} selected {% endif %}>Categorias</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:'s' %} selected {% endif %}>{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <select class="form-select" name="stat">
+                        <option value="" {% if not request.GET.stat %} selected {% endif %}>Status</option>
+                        {% for stat in status %}
+                            <option value="{{ stat.0 }}" {% if request.GET.stat == stat.0|stringformat:'s' %} selected {% endif %}>{{ stat.1 }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-filter"></i> Filtrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Modelo</th>
+                    <th>Nº de Inventário</th>
+                    <th>Fabricante</th>
+                    <th>Nº de Série</th>
+                    <th>Categoria</th>
+                    <th>Status</th>
+                    <th>Colaborador</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for computer in computers %}
+                    <tr>
+                        <td>{{ computer.name }}</td>
+                        <td>{{ computer.model }}</td>
+                        <td>{{ computer.inventory_number }}</td>
+                        <td>{{ computer.brand }}</td>
+                        <td>{{ computer.serie_number}}</td>
+                        <td>{{ computer.category }}</td>
+                        {% if computer.status == "active" %}
+                            <td><span class="bg-success text-white p-1 rounded">{{ computer.get_status_display }}</span></td>
+                        {% endif %}
+                        {% if computer.status == "in_stock" %}
+                            <td><span class="bg-warning p-1 rounded">{{ computer.get_status_display }}</span></td>
+                        {% endif %}
+                        {% if computer.status == "inactive" %}
+                            <td><span class="bg-danger text-white p-1 rounded">{{ computer.get_status_display }}</span></td>
+                        {% endif %}
+                        <td>{{ computer.collaborator_computer.name }}</td>
+                        <td>
+                            <a href="{% url 'computers_detail' computer.id %}" class="btn btn-info btn-sm">
+                                <i class="bi bi-eye"></i>
+                            </a>
+
+                            <a href="{% url 'computers_update' computer.id %}" class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+
+                            <a href="{% url 'computers_delete' computer.id %}" class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+    
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% include 'components/_pagination.html' %}
+
+{% endblock %}

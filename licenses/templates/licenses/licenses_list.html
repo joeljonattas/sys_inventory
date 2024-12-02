@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Sys_Inventory - Licenças
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/styles_apps/styles_apps_list.css' %}">
+
+<div class="container-fluid mt-3">
+
+    <div class="table-responsive">
+        <div class="input-group border-bottom">
+            <h3 class="display-7">Lista de Licenças</h3>
+
+            <div class="ms-auto">
+                <button class="btn btn-secondary me-md-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasImport" aria-controls="offcanvasImport"><i class="bi bi-download"></i> Importar</button>
+                <div class="offcanvas offcanvas-end w-50" tabindex="-1" id="offcanvasImport" aria-labelledby="offcanvasRightLabel">
+
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasRightLabel">Importar</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+
+                    <div class="offcanvas-body">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Guia de Importação de Dados</h4>
+                            </div>
+                            <div class="card-body">
+                                <p>Para garantir que os dados sejam importados corretamente, siga as instruções abaixo:</p>
+                                
+                                <h5>1. Formato do Arquivo</h5>
+                                <p>Você pode importar arquivos nos formatos <strong>CSV</strong> ou <strong>XLSX</strong>.</p>
+                                <p>Certifique-se de que o arquivo contenha os cabeçalhos corretos. Veja abaixo os campos esperados:</p>
+                                
+                                <ul>
+                                    <li><strong>software</strong> - Nome do software deve corresponder a uma das opções disponíveis no sistema.</li>
+                                    <li><strong>chave_licenca</strong> - Chave de licença (deve ser única).</li>
+                                    <li><strong>tipo_licenca</strong> - Tipo de licença (deve corresponder a um tipo válido cadastrado no sistema).</li>
+                                    <li><strong>categoria</strong> - Categoria associada, deve corresponder a uma categoria válida cadastrada no sistema.</li>
+                                    <li><strong>data_compra</strong> - Data de compra (opcional, no formato AAAA-MM-DD).</li>
+                                    <li><strong>data_expiracao</strong> - Data de expiração (opcional, no formato AAAA-MM-DD).</li>
+                                    <li><strong>status</strong> - Status do item deve corresponder a uma das opções disponíveis no sistema.</li>
+                                    <li><strong>colaborador</strong> - Colaborador associado (opcional, deve corresponder a um colaborador válido).</li>
+                                    <li><strong>valor</strong> - Valor da licença (obrigatório, no formato numérico).</li>
+                                    <li><strong>descricao</strong> - Descrição do item (opcional).</li>
+                                </ul>
+                        
+                                <h5>2. Regras para Preenchimento</h5>
+                                <ul>
+                                    <li>O campo <strong>chave_licenca</strong> deve ser único. Certifique-se de não utilizar duplicatas.</li>
+                                    <li>Os campos <strong>tipo_licenca</strong> e <strong>category</strong> devem ser válidos e já cadastrados no sistema.</li>
+                                    <li>Os campos <strong>data_compra</strong> e <strong>data_expiracao</strong> devem ser preenchidos no formato AAAA-MM-DD, se utilizados.</li>
+                                    <li>O campo <strong>valor</strong> é obrigatório e deve ser preenchido com um valor numérico válido.</li>
+                                    <li>O campo <strong>descricao</strong> deve conter um valor válido cadastrado no sistema.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+
+                        <form method="post" enctype="multipart/form-data" action="{%url 'licenses_import'%}">
+                            {% csrf_token %}
+                            <label class="form-label mt-2 mb-1" for="customFile">Buscar arquivo</label>
+                            <input type="file" class="form-control" id="customFile" name="importData" />
+                            <p class="mt-3 mb-1">Informe o formato do arquivo</p>
+                            <select name="file-format" class="form-control mb-3 mt-1">
+                                <option selected>Escolha um formato...</option>
+                                <option>CSV</option>
+                                <option>XLSX</option>
+                            </select>
+                            <button class="btn btn-primary" type="submit">Importar</button>
+                          </form>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExport" aria-controls="offcanvasExport"><i class="bi bi-upload"></i> Exportar</button>
+                <div class="offcanvas offcanvas-end w-50" tabindex="-1" id="offcanvasExport" aria-labelledby="offcanvasRightLabel">
+
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasRightLabel">Exportar</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+
+                    <div class="offcanvas-body">
+                        <form method="post" enctype="multipart/form-data" action="{% url 'licenses_export' %}">
+                            {% csrf_token %}
+                            <p class="mb-1">Filtrar</p>
+                            <div class="input-group mb-3">
+                                <select class="form-select" name="stat">
+                                    <option value="" {% if not request.GET.stat %} selected {% endif %}>Status</option>
+                                    {% for stat in status %}
+                                        <option value="{{ stat.0 }}" {% if request.GET.sector == stat.0|stringformat:'s' %} selected {% endif %}>{{ stat.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                                <select class="form-select" name="software">
+                                    <option value="" {% if not request.GET.software %} selected {% endif %}>Software</option>
+                                    {% for software in softwares %}
+                                        <option value="{{ software.0 }}" {% if request.GET.sector == software.0|stringformat:'s' %} selected {% endif %}>{{ software.1 }}</option>
+                                    {% endfor %}
+                                </select>
+            
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-filter"></i> Filtrar
+                                </button>
+                            </div>
+
+                            <p class="mb-1">Escolha o formato do arquivo.</p>
+                            <select name="file-format" class="form-control mb-3 mt-1">
+                                <option selected>Escolher formato...</option>
+                                <option>CSV</option>
+                                <option>XLSX (Excel)</option>
+                              </select>
+                            <button class="btn btn-primary" type="submit">Exportar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="input-group d-flex mb-3 altura-input">
+            <div class="col-md-4">
+                <form method="get" action="{%url 'licenses_list'%}">
+                    <div class="input-group text-white">
+                        <input type="text" class="form-control" name="search" placeholder="Busque pelo Nome ou Chave da Licença" value="{{ request.GET.name }}">
+                        <button class="btn btn-primary color" type="submit">Buscar</button>
+                    </div>
+                </form>
+            </div>
+    
+            <div class="ms-auto">
+                <a href="{%url 'licenses_create'%}" class="btn btn-success ">
+                    <i class="bi bi-plus"></i> Adicionar Licença
+                </a>
+            </div>
+        </div>
+
+        <div class="espaco-baixo">
+            <form method="get" action="{% url 'licenses_list' %}">
+                <div class="input-group w-50">
+                    <select class="form-select" name="stat">
+                        <option value="" {% if not request.GET.stat %} selected {% endif %}>Status</option>
+                        {% for stat in status %}
+                            <option value="{{ stat.0 }}" {% if request.GET.sector == stat.0|stringformat:'s' %} selected {% endif %}>{{ stat.1 }}</option>
+                        {% endfor %}
+                    </select>
+                    <select class="form-select" name="software">
+                        <option value="" {% if not request.GET.software %} selected {% endif %}>Software</option>
+                        {% for software in softwares %}
+                            <option value="{{ software.0 }}" {% if request.GET.sector == software.0|stringformat:'s' %} selected {% endif %}>{{ software.1 }}</option>
+                        {% endfor %}
+                    </select>
+                    <select class="form-select" name="license_type">
+                        <option value="" {% if not request.GET.license_type %} selected {% endif %}>Tipo de Licença</option>
+                        {% for license_type in licenses_types %}
+                            <option value="{{ license_type.id }}" {% if request.GET.license_type == license_type.id|stringformat:'s' %} selected {% endif %}>{{ license_type.name }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-filter"></i> Filtrar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <table class="table table-striped">
+            <thead class="align-middle">
+                <tr>
+                    <th>Nome</th>
+                    <th>Software</th>
+                    <th>Nº de Inventário</th>
+                    <th>Chave da licença</th>
+                    <th>Tipo de licença</th>
+                    <th>Status</th>
+                    <th>Colaborador</th>
+                    <th>Descrição</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for license in licenses %}
+                    <tr>
+                        <td>{{ license.name }}</td>
+                        <td>{{ license.get_software_display }}</td>
+                        <td>{{ license.inventory_number }}</td>
+                        <td>{{ license.license_key }}</td>
+                        <td>{{ license.license_type }}</td>
+                        {% if license.status == "active" %}
+                            <td><span class="bg-success text-white p-1 rounded">{{ license.get_status_display }}</span></td>
+                        {% endif %}
+                        {% if license.status == "in_stock" %}
+                            <td><span class="bg-warning p-1 rounded">{{ license.get_status_display }}</span></td>
+                        {% endif %}
+                        {% if license.status == "inactive" %}
+                            <td><span class="bg-danger text-white p-1 rounded">{{ license.get_status_display }}</span></td>
+                        {% endif %}
+                        {% if license.assigned_to is None %}
+                            <td>Não vinculado</td>
+                        {% else %}
+                            <td>{{ license.assigned_to }}</td>
+                        {% endif %}
+                        <td>{{ license.description }}</td>
+                        <td>
+                            <a href="{% url 'licenses_detail' license.id %}" class="btn btn-info btn-sm">
+                                <i class="bi bi-eye"></i>
+                            </a>
+
+                            <a href="{% url 'licenses_update' license.id %}" class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+
+                            <a href="{% url 'licenses_delete' license.id %}" class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+    
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% include 'components/_pagination.html' %}
+
+{% endblock %}

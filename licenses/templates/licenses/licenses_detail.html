@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Sys_Inventory - Licenças
+{% endblock %}
+
+{% load static %}
+{% load license_filter %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/styles_apps/styles_apps_detail.css' %}">
+
+<div class="container-fluid mt-3">
+    <div class="border-bottom">
+        <h3 class="display-7">Detalhes da Licença</h3>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-sm-4">
+            <div class="card bg-dark shadow-detail text-light">
+                <div class="card-header fs-3 fw-semibold border-bottom border-black">
+                    Informações da Licença
+                </div>
+                <div class="card-body">
+                    <div class="mb-2">
+                        <label class="form-label mb-0"><strong>Nome:</strong></label>
+                        <input class="form-control bg-dark text-light" type="text" value="{{ object.name }}" disabled readonly>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label mb-0"><strong>Software:</strong></label>
+                        <input class="form-control bg-dark text-light" type="text" value="{{ object.get_software_display }}" disabled readonly>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label mb-0"><strong>Chave:</strong></label>
+                        <input class="form-control bg-dark text-light" type="text" value="{{ object.license_key }}" disabled readonly>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label mb-0"><strong>Tipo de Licença:</strong></label>
+                        <input class="form-control bg-dark text-light" type="text" value="{{ object.license_type }}" disabled readonly>
+                    </div>
+
+                    <div class="mb-2">
+                        {% if object.purchase_date is None %}
+                            <div class="col">
+                                <label class="form-label mb-0"><strong>Data de compra:</strong></label>
+                                <input class="form-control bg-dark text-light" type="text" value="Não vinculado" disabled readonly>
+                            </div>
+                        {% else %}
+                            <div class="col">
+                                <label class="form-label mb-0"><strong>Data de compra:</strong></label>
+                                <input class="form-control bg-dark text-light" type="text" value="{{ object.purchase_date }}" disabled readonly>
+                            </div>
+                        {% endif %}
+
+                        {% if object.expiration_date is None %}
+                            <div class="col">
+                                <label class="form-label mb-0"><strong>Data de expiração:</strong></label>
+                                <input class="form-control bg-dark text-light" type="text" value="Não vinculado" disabled readonly>
+                            </div>
+                        {% else %}
+                            <div class="col">
+                                <label class="form-label mb-0"><strong>Data de expiração:</strong></label>
+                                <input class="form-control bg-dark text-light" type="text" value="{{ object.expiration_date }}" disabled readonly>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label mb-0"><strong>Status:</strong></label>
+                        <input class="form-control bg-dark text-light" type="text" value="{{ object.get_status_display }}" disabled readonly>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label mb-0"><strong>Colaborador Associado:</strong></label>
+                        <input class="form-control bg-dark text-light" type="text" value="{{ object.assigned_to }}" disabled readonly>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label mb-0"><strong>Descrição:</strong></label>
+                        <input class="form-control bg-dark text-light" type="text" value="{{ object.description }}" disabled readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-8">
+            <div class="card bg-dark shadow-detail text-light">
+                <div class="card-header fs-4 fw-semibold border-bottom border-black">
+                    Histórico
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped text-light table-dark">
+                        <thead>
+                            <tr>
+                                <th>Ação</th>
+                                <th>Usuário</th>
+                                <th>Data/Hora</th>
+                                <th>Alterações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in logs %}
+                            <tr>
+                                <td>
+                                    {% if log.action == 0 %} Criação 
+                                    {% elif log.action == 1 %} Atualização 
+                                    {% elif log.action == 2 %} Exclusão 
+                                    {% endif %}
+                                </td>
+                                <td>{{ log.actor }}</td>
+                                <td>{{ log.timestamp }}</td>
+                                <td>
+                                    {% if log.action == 1 %}
+                                        {% for key, value in log.changes_display_dict.items %}
+                                            Campo: <strong>{{ key|filter_name }}</strong> <br>
+                                            Alteração: 
+                                            {% if value.0 == 'None' %}
+                                                <strong>Não Vinculado</strong>
+                                            {% elif key == 'value' %}
+                                                <strong>{{ value.0|format_money }}</strong>
+                                            {% else %}
+                                                <strong>{{ value.0 }}</strong>
+                                            {% endif %}
+                                            <i class="bi bi-forward-fill"></i>
+                                            {% if value.1 == 'None' %}
+                                                <strong>Não Vinculado</strong>
+                                            {% elif key == 'value' %}
+                                                <strong>{{ value.1|format_money }}</strong>
+                                            {% else %}
+                                                <strong>{{ value.1 }}</strong>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        Cadastro da Licença
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4">Nenhuma ação registrada.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div class="d-flex justify-content-center mt-4 mb-4">
+        <a href="{%url 'licenses_list'%}" class="btn btn-dark ">Voltar para a Lista de Licenças</a>
+    </div>
+    
+
+</div>
+
+{% endblock %}

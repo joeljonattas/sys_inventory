@@ -1,0 +1,15 @@
+.form-control{
+    box-shadow: none !important;
+}
+
+.form-select{
+    box-shadow: none !important;
+}
+
+.espaco-baixo{
+    padding-bottom: 10px;
+}
+
+.altura-input{
+    padding-top: 15px;
+}

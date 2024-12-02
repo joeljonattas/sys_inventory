@@ -1,0 +1,35 @@
+.form-control{
+    border-color: darkgray !important;
+    background-color: #292929 !important;
+}
+  
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem darkgray !important;
+    background-color: #292929 !important;
+}
+
+.form-control:-webkit-autofill {
+    background-color: #292929 !important;
+    -webkit-box-shadow: 0 0 0 30px #292929 inset !important;
+    -webkit-text-fill-color: white !important;
+}
+
+.form-control:-moz-autofill {
+    background-color: #292929 !important;
+    -moz-box-shadow: 0 0 0 30px #292929 inset !important;
+    -moz-text-fill-color: white !important;
+}
+
+.form-control:-ms-autofill {
+    background-color: #292929 !important;
+    -ms-box-shadow: 0 0 0 30px #292929 inset !important;
+    -ms-text-fill-color: white !important;
+}
+
+.bg-black-light{
+    background-color: #292929;
+}
+
+.bg-black{
+    background-color: #1e1e1e !important;
+}

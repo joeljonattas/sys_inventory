@@ -1,0 +1,92 @@
+<style>
+    .teal{
+        background-color: #008080;
+    }
+
+    .orange{
+        background-color: #0b6464;
+    }
+
+    .cyan{
+        background-color: #008080;
+    }
+</style>
+
+<div class="card mt-2">
+    <div class="card-body">
+        <div class="row">
+
+            <div class="col-md-4">
+                <div class="card cyan">
+                    <div class="card-body">
+                        <h5 class="card-title text-light fw-bolder fs-4 border-bottom border-light">Computadores <i class="bi bi-laptop fs-4"></i></h5>
+                        <span class="card-text text-light fw-semibold fs-5">Quantidade: {{ inventory_metrics.computers_quantity }}</span>
+                        <br>
+                        <span class="card-text text-light fw-semibold fs-5">Valor Total: R$ {{ inventory_metrics.computers_value }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card cyan">
+                    <div class="card-body">
+                        <h5 class="card-title text-light fw-bolder fs-4 border-bottom border-light">Telefones <i class="bi bi-phone fs-4"></i></h5>
+                        <span class="card-text text-light fw-semibold fs-5">Quantidade: {{ inventory_metrics.phones_quantity }}</span>
+                        <br>
+                        <span class="card-text text-light fw-semibold fs-5">Valor Total: R$ {{ inventory_metrics.phones_value }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card cyan">
+                    <div class="card-body">
+                        <h5 class="card-title text-light fw-bolder fs-4 border-bottom border-light">Linhas Telefônicas <i class="bi bi-sim fs-4"></i></h5>
+                        <span class="card-text text-light fw-semibold fs-5">Quantidade: {{ inventory_metrics.phones_lines_quantity }}</span>
+                        <br>
+                        <span class="card-text text-light fw-semibold fs-5">Valor Total: R$ {{ inventory_metrics.phones_lines_value }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mt-2">
+                <div class="col-md-4">
+                    <div class="card orange">
+                        <div class="card-body">
+                            <h5 class="card-title text-light fw-bolder fs-4 border-bottom border-light">Impressoras <i class="bi bi-printer fs-4"></i></h5>
+                            <span class="card-text text-light fw-semibold fs-5">Quantidade: {{ inventory_metrics.printers_quantity }}</span>
+                            <br>
+                            <span class="card-text text-light fw-semibold fs-5">Valor Total: R$ {{ inventory_metrics.printers_value }}</span>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="col-md-4">
+                    <div class="card orange">
+                        <div class="card-body">
+                            <h5 class="card-title text-light fw-bolder fs-4 border-bottom border-light">Licenças <i class="bi bi-file-earmark-bar-graph fs-4"></i></h5>
+                            <span class="card-text text-light fw-semibold fs-5">Quantidade: {{ inventory_metrics.licenses_quantity }}</span>
+                            <br>
+                            <span class="card-text text-light fw-semibold fs-5">Valor Total: R$ {{ inventory_metrics.licenses_value }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="mb-2"></div>
+            <div class="row justify-content-center">
+                <div class="col-md-4">
+                    <div class="card bg-success">
+                        <div class="card-body">
+                            <h5 class="card-title text-light fw-bolder fs-4 border-bottom border-light">Valor do Inventário <i class="bi bi-currency-dollar fs-4"></i></h5>
+                            <span class="card-text text-light fw-semibold fs-4">R$ {{ inventory_metrics.inventory_value }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

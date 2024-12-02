@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Sys_Inventory - Home
+{% endblock %}
+
+{% block content %}
+    {% include 'components/_inventory_metrics.html' %}
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <div class="row mt-3 justify-content-center">
+        <div class="col-md-6 text-center space-left">
+            <h5 class="text-center mb-2">Equipamentos por Fabricantes</h5>
+            <canvas id="EquipamentsByBrand"></canvas>
+        </div>
+        <div class="col-md-6 text-center">
+            <h5 class="text-center mb-2">Equipamentos Cadastrados (Últimos 7 dias)</h5>
+            <canvas id="EquipamentsRegisterByDaily"></canvas>
+        </div>
+
+    </div>
+    <div class="row mt-3 justify-content-center">
+        <div class="col-md-6 text-center">
+            <h5 class="text-center mb-3">Equipamentos por Setor</h5>
+            <canvas id="EquipamentsBySector"></canvas>
+        </div>
+        <div class="col-md-6 text-center">
+            <h5 class="text-center mb-3">Equipamentos por Status</h5>
+            <canvas id="EquipamentsByStatus"></canvas>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var brandNames = JSON.parse('{{ brand_equipaments.brand_names|safe }}');
+            var equipamentCounts = JSON.parse('{{ brand_equipaments.brand_count_equipaments|safe }}');
+        
+            var ctxEquipamentsByCategory = document.getElementById('EquipamentsByBrand').getContext('2d');
+            var equipamentsByCategoryChart = new Chart(ctxEquipamentsByCategory, {
+                type: 'bar',
+                data: {
+                    labels: brandNames,
+                    datasets: [{
+                        data: equipamentCounts,
+                        backgroundColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(153, 102, 255, 1)'
+                        ],
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            min: 0,
+                            max: 50,
+                            stepSize: 5,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+    <script>
+        var statusNames = JSON.parse('{{ status_equipaments.status_names|safe }}');
+        var equipamentCounts = JSON.parse('{{ status_equipaments.status_count_equipaments|safe }}');
+    
+        var ctxEquipamentsByStatus = document.getElementById('EquipamentsByStatus').getContext('2d');
+        var equipamentsByStatusChart = new Chart(ctxEquipamentsByStatus, {
+            type: 'doughnut',
+            data: {
+                labels: statusNames,
+                datasets: [{
+                data: equipamentCounts,
+                backgroundColor: [
+                    'rgba(255, 165, 0, 0.8)',   
+                    'rgba(75, 192, 192, 0.8)',
+                    'rgba(255, 0, 0, 0.8)',
+                ],
+            }],
+            options: {
+                responsive: true,
+            }
+            }
+
+        });
+    </script>
+
+    <script>
+        var sectorsData = JSON.parse('{{ sectors_equipaments.sectors_data|safe }}');
+
+        var ctxEquipamentsBySector = document.getElementById('EquipamentsBySector').getContext('2d');
+        var equipamentsBySectorChart = new Chart(ctxEquipamentsBySector, {
+            type: 'pie',
+            data: {
+                labels: sectorsData.map(data => data.name),
+                datasets: [{
+                    label: 'Total de Equipamentos',
+                    data: sectorsData.map(data => data.computers + data.phones + data.phone_numbers),
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(75, 192, 192, 0.8)',
+                        'rgba(255, 206, 86, 0.8)',
+                        'rgba(153, 102, 255, 0.8)',
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(255, 159, 64, 0.8)',
+                        'rgba(201, 203, 207, 0.8)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const index = context.dataIndex;
+                                const sectorData = sectorsData[index];
+                                return [
+                                    `Computadores: ${sectorData.computers}`,
+                                    `Telefones: ${sectorData.phones}`,
+                                    `Linhas Telefônicas: ${sectorData.phone_numbers}`
+                                ];
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script>
+        var dailyData = JSON.parse('{{ daily_register.dates|safe }}');
+        var computerValues = JSON.parse('{{ daily_register.computer_values|safe }}');
+        var phoneValues = JSON.parse('{{ daily_register.phone_values|safe }}');
+        var printerValues = JSON.parse('{{ daily_register.printers_values|safe }}');
+        var licenseValues = JSON.parse('{{ daily_register.licenses_values|safe }}');
+        var modelsNames = JSON.parse('{{ daily_register.models|safe }}');
+
+        var ctxEquipamentsByDaily = document.getElementById('EquipamentsRegisterByDaily').getContext('2d');
+        var datasets = [
+            {
+                label: modelsNames[0],
+                data: computerValues,
+                fill: false,
+                backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 2,
+                tension: 0.5
+            },
+            {
+                label: modelsNames[1],
+                data: phoneValues,
+                fill: false,
+                backgroundColor: 'rgba(75, 192, 192, 0.8)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2,
+                tension: 0.5
+            },
+            {
+                label: modelsNames[3],
+                data: printerValues,
+                fill: false,
+                backgroundColor: 'rgba(255, 99, 132, 0.8)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 2,
+                tension: 0.5
+            },
+            {
+                label: modelsNames[4],
+                data: licenseValues,
+                fill: false,
+                backgroundColor: 'rgba(255, 206, 86, 0.8)',
+                borderColor: 'rgba(255, 206, 86, 1)',
+                borderWidth: 2,
+                tension: 0.5
+            },
+        ];
+
+        var EquipamentsRegisterByDailyChart = new Chart(ctxEquipamentsByDaily, {
+            type: 'line',
+            data: {
+                labels: dailyData,
+                datasets: datasets
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        min: 0,
+                        max: 20,
+                        stepSize: 5,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+{% endblock %}

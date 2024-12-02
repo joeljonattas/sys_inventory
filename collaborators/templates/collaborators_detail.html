@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Sys_Inventory - Colaboradores
+{% endblock %}
+
+{% load static %}
+{% load filter_name %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/styles_apps/styles_apps_detail.css' %}">
+
+<div class="container-fluid mt-3">
+    <div class="border-bottom">
+        <h3 class="display-7">Detalhes do Colaborador</h3>
+    </div>
+
+    <div class="row d-flex justify-content-center mt-4">
+        <div class="col-sm-4">
+            <div class="card bg-dark shadow-detail text-light">
+                <div class="card-header fs-3 fw-semibold border-bottom border-black">
+                    Informações pessoais
+                </div>
+                <div class="card-body">
+                    <div class="mb-2">
+                        <label class="form-label mb-0"><strong>Nome:</strong></label>
+                        <input class="form-control bg-dark text-light" type="text" value="{{ object.name }}" disabled readonly>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label mb-0"><strong>E-mail empresarial:</strong></label>
+                        <input class="form-control bg-dark text-light" type="text" value="{{ object.email }}" disabled readonly>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label mb-0"><strong>Setor:</strong></label>
+                        <input class="form-control bg-dark text-light" type="text" value="{{ object.sector }}" disabled readonly>
+                    </div>
+                    {% if object.phone_number is None %}
+                        <div class="mb-2">
+                            <label class="form-label mb-0"><strong>Linha empresarial:</strong></label>
+                            <input class="form-control bg-dark text-light" type="text" value="Não vinculado" disabled readonly>
+                        </div>
+                    {% else %}
+                        <div class="mb-2">
+                            <label class="form-label mb-0"><strong>Linha empresarial:</strong></label>
+                            <input class="form-control bg-dark text-light" type="text" value="{{ object.phone_number }}" disabled readonly>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card bg-dark shadow-detail text-light mt-3">
+                <div class="card-header fs-3 fw-semibold border-bottom border-black">
+                    Equipamentos vinculados
+                </div>
+                <div class="card-body">
+                    <div class="row mb-2">
+                        {% if object.computer is None %}
+                            <div class="col">
+                                <label class="form-label mb-0"><strong>Notebook:</strong></label>
+                                <input class="form-control bg-dark text-light" type="text" value="Não vinculado" disabled readonly>
+                            </div>
+                        {% else %}
+                            <div class="col">
+                                <label class="form-label mb-0"><strong>Notebook:</strong></label>
+                                <input class="form-control bg-dark text-light" type="text" value="{{ object.computer }}" disabled readonly>
+                            </div>
+                        {% endif %}
+
+                        {% if collaborator.computer.serie_number is None %}
+                            <div class="col">
+                                <label class="form-label mb-0"><strong>Número de série:</strong></label>
+                                <input class="form-control bg-dark text-light" type="text" value="Não vinculado" disabled readonly>
+                            </div>
+                        {% else %}
+                            <div class="col">
+                                <label class="form-label mb-0"><strong>Número de série:</strong></label>
+                                <input class="form-control bg-dark text-light" type="text" value="{{ collaborator.computer.serie_number }}" disabled readonly>
+                            </div>
+                        {% endif %}
+                    </div>
+    
+                    <div class="row mb-2">
+                        {% if object.phone is None %}
+                            <div class="col">
+                                <label class="form-label mb-0"><strong>Telefone:</strong></label>
+                                <input class="form-control bg-dark text-light" type="text" value="Não vinculado" disabled readonly>
+                            </div>
+                        {% else %}
+                            <div class="col">
+                                <label class="form-label mb-0"><strong>Telefone:</strong></label>
+                                <input class="form-control bg-dark text-light" type="text" value="{{ object.phone }}" disabled readonly>
+                            </div>
+                        {% endif %}
+
+                        {% if collaborator.phone.serie_number is None %}
+                            <div class="col">
+                                <label class="form-label mb-0"><strong>IMEI:</strong></label>
+                                <input class="form-control bg-dark text-light" type="text" value="Não vinculado" disabled readonly>
+                            </div>
+                        {% else %}
+                            <div class="col">
+                                <label class="form-label mb-0"><strong>IMEI:</strong></label>
+                                <input class="form-control bg-dark text-light" type="text" value="{{ collaborator.phone.serie_number }}" disabled readonly>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-8">
+            <div class="card bg-dark shadow-detail text-light">
+                <div class="card-header fs-4 fw-semibold border-bottom border-black">
+                    Histórico do Colaborador
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped text-light table-dark">
+                        <thead>
+                            <tr>
+                                <th>Ação</th>
+                                <th>Usuário</th>
+                                <th>Data/Hora</th>
+                                <th>Alterações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in logs %}
+                            <tr>
+                                <td>
+                                    {% if log.action == 0 %} Criação 
+                                    {% elif log.action == 1 %} Atualização 
+                                    {% elif log.action == 2 %} Exclusão 
+                                    {% endif %}
+                                </td>
+                                <td>{{ log.actor }}</td>
+                                <td>{{ log.timestamp }}</td>
+                                <td>
+                                    {% if log.action == 1 %}
+                                        {% for key, value in log.changes_display_dict.items %}
+                                            Campo: <strong>{{ key|filter_name }}</strong> <br>
+                                            Alteração: 
+                                            {% if value.0 == 'None' %}
+                                                <strong>Não Vinculado</strong>
+                                            {% else %}
+                                                <strong>{{ value.0 }}</strong>
+                                            {% endif %}
+                                            <i class="bi bi-forward-fill"></i>
+                                            {% if value.1 == 'None' %}
+                                                <strong>Não Vinculado</strong>
+                                            {% else %}
+                                                <strong>{{ value.1 }}</strong>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        Cadastro do Colaborador
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4">Nenhuma ação registrada.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div class="d-flex justify-content-center mt-4 mb-4">
+        <a href="{%url 'collaborators_list'%}" class="btn btn-dark ">Voltar para a Lista de Colaboradores</a>
+    </div>
+    
+
+</div>
+
+{% endblock %}

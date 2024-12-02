@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/styles_apps/styles_apps_form.css' %}">
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+
+<div class="container-fluid mt-3">
+    <div class="border-bottom">
+        <h3 class="display-7">Editar Fabricante</h3>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="post" class="form">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary p-2">Salvar Fabricante</button>
+            </form>
+    
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center baixo-div">
+        <a href="{%url 'brands_list'%}" class="btn btn-dark ">Voltar para a Lista de Fabricantes</a>
+    </div>
+
+</div>
+
+{% endblock %}

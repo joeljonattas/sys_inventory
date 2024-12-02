@@ -1,0 +1,108 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+<div class="col-12 col-sm-2 color-sidebar full-height border-right border-black">
+  <div class="collapse d-sm-block mt-2" id="menuCollapse">
+    <ul class="nav flex-column float-start" id="menu">
+      <li>
+        <a href="{% url 'home' %}" class="nav-link px-4">
+          <i class="bi bi-speedometer2 fs-5 color-icon"></i>
+          <span class="ms-1 text-white fs-5">Dashboard</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="{% url 'collaborators_list' %}" class="nav-link px-4">
+          <i class="bi bi-people-fill fs-5 color-icon"></i>
+          <span class="ms-1 text-white fs-5">Colaboradores</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="{% url 'computers_list' %}" class="nav-link px-4">
+          <i class="bi bi-laptop fs-5 color-icon"></i>
+          <span class="ms-1 text-white fs-5">Computadores</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="{% url 'printers_list' %}" class="nav-link px-4">
+          <i class="bi bi-printer fs-5 color-icon"></i>
+          <span class="ms-1 text-white fs-5">Impressoras</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="{% url 'licenses_list' %}" class="nav-link px-4">
+          <i class="bi bi-file-earmark-bar-graph fs-5 color-icon"></i>
+          <span class="ms-1 text-white fs-5">Licenças</span>
+        </a>
+      </li>
+
+      <a class="nav-link px-4" data-bs-toggle="collapse" href="#collapsePhones">
+        <i class="bi bi-telephone fs-5 color-icon"></i>
+        <span class="ms-1 text-white fs-5">Telefonia</span>
+      </a>
+      <div class="collapse" id="collapsePhones">
+        <li>
+            <a href="{% url 'phones_list' %}" class="nav-link px-5 prevent-collapse">
+                <i class="bi bi-phone fs-6 color-icon"></i>
+                <span class="ms-1 text-white fs-6">Telefones</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'phones_lines_list' %}" class="nav-link px-5 prevent-collapse">
+                <i class="bi bi-sim fs-6 color-icon"></i>
+                <span class="ms-1 text-white fs-6">Linhas</span>
+            </a>
+        </li>
+      </div>
+
+      <a class="nav-link px-4" data-bs-toggle="collapse" href="#collapseLines">
+        <i class="bi bi-list fs-5 color-icon"></i>
+        <span class="ms-1 text-white fs-5">Listas Suspensas</span>
+      </a>
+      <div class="collapse" id="collapseLines">
+          <ul class="list-unstyled">
+            <li>
+                <a href="{% url 'brands_list' %}" class="nav-link px-5 prevent-collapse">
+                    <i class="bi bi-shop fs-6 color-icon"></i>
+                    <span class="ms-1 text-white fs-6">Fabricantes</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'categories_list' %}" class="nav-link px-5 prevent-collapse">
+                    <i class="bi bi-tags fs-6 color-icon"></i>
+                    <span class="ms-1 text-white fs-6">Categorias</span>
+                </a>
+            </li>
+            <li>
+              <a href="{% url 'sectors_list' %}" class="nav-link px-5 prevent-collapse">
+                  <i class="bi bi-person-vcard fs-6 color-icon"></i>
+                  <span class="ms-1 text-white fs-6">Setores</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'licenses_type_list' %}" class="nav-link px-5 prevent-collapse">
+                  <i class="bi bi-card-list fs-6 color-icon"></i>
+                  <span class="ms-1 text-white fs-6">Tipos de Licença</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="{% url 'operators_list' %}" class="nav-link px-5 prevent-collapse">
+                  <i class="bi bi-file-bar-graph fs-6 color-icon"></i>
+                  <span class="ms-1 text-white fs-6">Operadoras</span>
+              </a>
+            </li>
+          </ul>
+      </div>
+    </ul>
+  </div>
+</div>
+
+
+
+
+

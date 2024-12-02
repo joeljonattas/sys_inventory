@@ -1,0 +1,64 @@
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+}
+
+.altura-header {
+  height: 6vh;
+}
+
+.full-height {
+  min-height: calc(100vh - 6vh);
+}
+
+.space-left{
+  padding-left: 15px;
+}
+
+.fundo{
+  background-color: lightgrey;
+}
+
+.sombra{
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.shadow-header{
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.tamanho{
+  min-height: calc(100vh - 6vh - 40px);
+}
+
+.footer {
+  height: 30px;
+}
+
+.color-header{
+  background-color: #1C1C1C;
+}
+
+.color-sidebar{
+  background-color: #1e1e1e; 
+}
+
+.color-icon{
+  color: white;
+}
+
+.dropdown-item {
+  color: white;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+  background-color: #495057 !important;
+  color: white;
+}
+
+btn-close{
+  color: white !important;
+}

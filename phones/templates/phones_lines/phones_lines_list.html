@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Sys_Inventory - Linhas Telefônicas
+{% endblock %}
+
+{% load static %}
+{% load phones_filter %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/styles_apps/styles_apps_list.css' %}">
+<script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+<script src="{% static 'js/jquery.mask.min.js' %}"></script>
+<script src="{% static 'js/masks.js' %}"></script>
+
+
+<div class="container-fluid mt-3">
+
+    <div class="table-responsive bg-white">
+        <div class="input-group border-bottom">
+            <h3 class="display-7">Lista de Linhas Telefônicas</h3>
+
+            <div class="ms-auto">
+                <button class="btn btn-secondary me-md-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasImport" aria-controls="offcanvasImport"><i class="bi bi-download"></i> Importar</button>
+                <div class="offcanvas offcanvas-end w-50" tabindex="-1" id="offcanvasImport" aria-labelledby="offcanvasRightLabel">
+
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasRightLabel">Importar</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+
+                    <div class="offcanvas-body">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Guia de Importação de Dados</h4>
+                            </div>
+                            <div class="card-body">
+                                <p>Para garantir que os dados sejam importados corretamente, siga as instruções abaixo:</p>
+                                
+                                <h5>1. Formato do Arquivo</h5>
+                                <p>Você pode importar arquivos nos formatos <strong>CSV</strong> ou <strong>XLSX</strong>.</p>
+                                <p>Certifique-se de que o arquivo contenha os cabeçalhos corretos. Veja abaixo os campos esperados:</p>
+                                
+                                <ul>
+                                    <li><strong>numero</strong> - Número da linha telefônica</li>
+                                    <li><strong>status</strong> - Status da linha telefônica</li>
+                                    <li><strong>operadora</strong> - Operadora da linha telefônica</li>
+                                    <li><strong>valor</strong> - Valor da linha telefônica</li>
+                                    <li><strong>descricao</strong> - Descrição da linha telefônica (opcional)</li>
+                                </ul>
+                        
+                                <h5>2. Regras para Preenchimento</h5>
+                                <ul>
+                                    <li>O campo <strong>numero</strong> deve ser único. Não utilize valores duplicados.</li>
+                                    <li>O campo <strong>valor</strong> deve ser preenchido obrigatoriamente.</li>
+                                    <li>O campo <strong>operadora</strong> deve corresponder a uma operadora válida do sistema. Utilize as operadoras cadastradas.</li>
+                                    <li>O campo <strong>status</strong> deve corresponder a um status válido do sistema. Utilize os status cadastrados.</li>
+                                    <li>O campo <strong>descricao</strong> é opcional.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <form method="post" enctype="multipart/form-data" action="{%url 'phones_lines_import'%}">
+                            {% csrf_token %}
+                            <label class="form-label mt-2 mb-1" for="customFile">Buscar arquivo</label>
+                            <input type="file" class="form-control" id="customFile" name="importData" />
+                            <p class="mt-3 mb-1">Informe o formato do arquivo</p>
+                            <select name="file-format" class="form-control mb-3 mt-1">
+                                <option selected>Escolha um formato...</option>
+                                <option>CSV</option>
+                                <option>XLSX</option>
+                            </select>
+                            <button class="btn btn-primary" type="submit">Importar</button>
+                          </form>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExport" aria-controls="offcanvasExport"><i class="bi bi-upload"></i> Exportar</button>
+                <div class="offcanvas offcanvas-end w-50" tabindex="-1" id="offcanvasExport" aria-labelledby="offcanvasRightLabel">
+
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasRightLabel">Exportar</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+
+                    <div class="offcanvas-body">
+                        <form method="post" enctype="multipart/form-data" action="{% url 'phones_lines_export' %}">
+                            {% csrf_token %}
+                            <p class="mb-1">Filtrar</p>
+                            <div class="input-group mb-3">
+                                <select class="form-select" name="operator">
+                                    <option value="" {% if not request.GET.operator %} selected {% endif %}>Operadoras</option>
+                                    {% for operator in operators %}
+                                        <option value="{{ operator.id }}" {% if request.GET.operator == operator.id|stringformat:'s' %} selected {% endif %}>{{ operator.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <select class="form-select" name="stat">
+                                    <option value="" {% if not request.GET.stat %} selected {% endif %}>Status</option>
+                                    {% for stat in status %}
+                                        <option value="{{ stat.0 }}" {% if request.GET.stat == stat.0|stringformat:'s' %} selected {% endif %}>{{ stat.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <p class="mb-1">Escolha o formato do arquivo.</p>
+                            <select name="file-format" class="form-control mb-3 mt-1">
+                                <option selected>Escolher formato...</option>
+                                <option>CSV</option>
+                                <option>XLSX (Excel)</option>
+                              </select>
+                            <button class="btn btn-primary" type="submit">Exportar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="input-group d-flex mb-3 altura-input">
+            <div class="col-md-4">
+                <form method="get" action="{%url 'phones_lines_list'%}">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="search" placeholder="Busque pelo Nome ou Número" value="{{ request.GET.model }}">
+                        <button class="btn btn-primary color" type="submit">Buscar</button>
+                    </div>
+                </form>
+            </div>
+    
+            <div class="ms-auto">
+                <a href="{% url 'phones_lines_create' %}" class="btn btn-success ">
+                    <i class="bi bi-plus"></i> Adicionar Linha Telefônica
+                </a>
+            </div>
+        </div>
+
+        <div class="espaco-baixo">
+            <form method="get" action="{% url 'phones_lines_list' %}">
+                <div class="input-group w-50">
+                    <select class="form-select" name="operator">
+                        <option value="" {% if not request.GET.operator %} selected {% endif %}>Operadoras</option>
+                        {% for operator in operators %}
+                            <option value="{{ operator.id }}" {% if request.GET.operator == operator.id|stringformat:'s' %} selected {% endif %}>{{ operator.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <select class="form-select" name="stat">
+                        <option value="" {% if not request.GET.stat %} selected {% endif %}>Status</option>
+                        {% for stat in status %}
+                            <option value="{{ stat.0 }}" {% if request.GET.stat == stat.0|stringformat:'s' %} selected {% endif %}>{{ stat.1 }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-filter"></i> Filtrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    
+        <table class="table table-striped">
+            <thead class="">
+                <tr>
+                    <th>Nome</th>
+                    <th>Número</th>
+                    <th>Nº de Inventário</th>
+                    <th>Operadora</th>
+                    <th>Status</th>
+                    <th>Valor da Linha</th>
+                    <th>Colaborador</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for phone_line in phones_lines %}
+                    <tr>
+                        <td>{{ phone_line.name }}</td>
+                        <td>{{ phone_line.number.as_national }}</td>
+                        <td>{{ phone_line.inventory_number }}</td>
+                        <td>{{ phone_line.operator }}</td>
+                        {% if phone_line.status == "active" %}
+                            <td><span class="bg-success text-white p-1 rounded">{{ phone_line.get_status_display }}</span></td>
+                        {% endif %}
+                        {% if phone_line.status == "in_stock" %}
+                            <td><span class="bg-warning p-1 rounded">{{ phone_line.get_status_display }}</span></td>
+                        {% endif %}
+                        {% if phone_line.status == "inactive" %}
+                        <td><span class="bg-danger text-white p-1 rounded">{{ phone_line.get_status_display }}</span></td>
+                        {% endif %}
+                        <td>{{ phone_line.value|format_money }}</td>
+                        <td>{{ phone_line.collaborator_number.name }}</td>
+                        <td>
+                            <a href="{% url 'phones_lines_detail' phone_line.id %}" class="btn btn-info btn-sm">
+                                <i class="bi bi-eye"></i>
+                            </a>
+
+                            <a href="{% url 'phones_lines_update' phone_line.id %}" class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+
+                            <a href="{% url 'phones_lines_delete' phone_line.id %}" class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+    
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% include 'components/_pagination.html' %}
+
+{% endblock %}
