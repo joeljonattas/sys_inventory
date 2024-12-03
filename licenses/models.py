@@ -64,8 +64,8 @@ class License(models.Model):
         super().save(*args, **kwargs)
         
 class LicensesInventory(models.Model):
-    licenses_count = models.IntegerField()
-    licenses_value = models.FloatField()
+    licenses_count = models.IntegerField(default=0)
+    licenses_value = models.FloatField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

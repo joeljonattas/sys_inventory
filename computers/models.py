@@ -101,8 +101,8 @@ class Computer(models.Model):
         super().save(*args, **kwargs)
     
 class ComputersInventory(models.Model):
-    computers_count = models.IntegerField()
-    computers_value = models.FloatField()
+    computers_count = models.IntegerField(default=0)
+    computers_value = models.FloatField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

@@ -110,8 +110,8 @@ class Phone(models.Model):
         super().save(*args, **kwargs)
     
 class PhonesInventory(models.Model):
-    phones_count = models.IntegerField()
-    phones_value = models.FloatField()
+    phones_count = models.IntegerField(default=0)
+    phones_value = models.FloatField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -121,8 +121,8 @@ class PhonesInventory(models.Model):
         return f'{self.phones_count} - {self.phones_value}'
     
 class PhonesNumberInventory(models.Model):
-    phones_line_count = models.IntegerField()
-    phones_line_value = models.FloatField()
+    phones_line_count = models.IntegerField(default=0)
+    phones_line_value = models.FloatField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

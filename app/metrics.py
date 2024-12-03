@@ -9,34 +9,63 @@ from django.utils.formats import number_format
 from django.utils import timezone
 from django.db.models import Count, Q
 import json
+from django.core.exceptions import ObjectDoesNotExist
 
 def get_inventory_metrics():
-    latest_computers = ComputersInventory.objects.latest('created_at')
-    latest_phones = PhonesInventory.objects.latest('created_at')
-    latest_lines = PhonesNumberInventory.objects.latest('created_at')
-    latest_printers = PrintersInventory.objects.latest('created_at')
-    latest_licenses = LicensesInventory.objects.latest('created_at')
+    def get_latest_or_zero(model):
+        try:
+            return model.objects.latest('created_at')
+        except ObjectDoesNotExist:
+            return None
+
+    latest_computers = get_latest_or_zero(ComputersInventory)
+    latest_phones = get_latest_or_zero(PhonesInventory)
+    latest_lines = get_latest_or_zero(PhonesNumberInventory)
+    latest_printers = get_latest_or_zero(PrintersInventory)
+    latest_licenses = get_latest_or_zero(LicensesInventory)
 
     data = {
-        'computers_quantity': latest_computers.computers_count,
-        'computers_value': number_format(latest_computers.computers_value, decimal_pos=2, force_grouping=True),
+        'computers_quantity': latest_computers.computers_count if latest_computers else 0,
+        'computers_value': number_format(
+            latest_computers.computers_value if latest_computers else 0,
+            decimal_pos=2,
+            force_grouping=True
+        ),
 
-        'phones_quantity': latest_phones.phones_count,
-        'phones_value': number_format(latest_phones.phones_value, decimal_pos=2, force_grouping=True),
+        'phones_quantity': latest_phones.phones_count if latest_phones else 0,
+        'phones_value': number_format(
+            latest_phones.phones_value if latest_phones else 0,
+            decimal_pos=2,
+            force_grouping=True
+        ),
 
-        'phones_lines_quantity': latest_lines.phones_line_count,
-        'phones_lines_value': number_format(latest_lines.phones_line_value, decimal_pos=2, force_grouping=True),
+        'phones_lines_quantity': latest_lines.phones_line_count if latest_lines else 0,
+        'phones_lines_value': number_format(
+            latest_lines.phones_line_value if latest_lines else 0,
+            decimal_pos=2,
+            force_grouping=True
+        ),
 
-        'printers_quantity': latest_printers.printers_count,
-        'printers_value': number_format(latest_printers.printers_value, decimal_pos=2, force_grouping=True),
+        'printers_quantity': latest_printers.printers_count if latest_printers else 0,
+        'printers_value': number_format(
+            latest_printers.printers_value if latest_printers else 0,
+            decimal_pos=2,
+            force_grouping=True
+        ),
 
-        'licenses_quantity': latest_licenses.licenses_count,
-        'licenses_value': number_format(latest_licenses.licenses_value, decimal_pos=2, force_grouping=True),
+        'licenses_quantity': latest_licenses.licenses_count if latest_licenses else 0,
+        'licenses_value': number_format(
+            latest_licenses.licenses_value if latest_licenses else 0,
+            decimal_pos=2,
+            force_grouping=True
+        ),
 
         'inventory_value': number_format(
-            latest_computers.computers_value +
-            latest_phones.phones_value +
-            latest_lines.phones_line_value,
+            (latest_computers.computers_value if latest_computers else 0) +
+            (latest_phones.phones_value if latest_phones else 0) +
+            (latest_lines.phones_line_value if latest_lines else 0) +
+            (latest_printers.printers_value if latest_printers else 0) +
+            (latest_licenses.licenses_value if latest_licenses else 0),
             decimal_pos=2,
             force_grouping=True
         ),

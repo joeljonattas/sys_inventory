@@ -76,8 +76,8 @@ class Printer(models.Model):
     
     
 class PrintersInventory(models.Model):
-    printers_count = models.IntegerField()
-    printers_value = models.FloatField()
+    printers_count = models.IntegerField(default=0)
+    printers_value = models.FloatField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
