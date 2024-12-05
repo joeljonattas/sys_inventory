@@ -29,26 +29,55 @@ Sys_Inventory - Telefones
                     Informações do Telefone
                 </div>
                 <div class="card-body">
-                    <div class="mb-2">
-                        <label class="form-label mb-0"><strong>Modelo:</strong></label>
-                        <input class="form-control bg-dark text-light" type="text" value="{{ object.model }}" disabled readonly>
+
+                    <div class="row mb-2">
+                        <div class="col">
+                            <label class="form-label mb-0"><strong>Nome:</strong></label>
+                            <input class="form-control bg-dark text-light" type="text" value="{{ object.name }}" disabled readonly>
+                        </div>
+                        <div class="col">
+                            <label class="form-label mb-0"><strong>Modelo:</strong></label>
+                            <input class="form-control bg-dark text-light" type="text" value="{{ object.model }}" disabled readonly>
+                        </div>
                     </div>
+
+                    {% if object.number is None %}
+                        <div class="mb-2">
+                            <label class="form-label mb-0"><strong>Linha telefônica:</strong></label>
+                            <input class="form-control bg-dark text-light" type="text" value="Não vinculado" disabled readonly>
+                        </div>
+                    {% else %}
+                        <div class="mb-2">
+                            <label class="form-label mb-0"><strong>Linha telefônica:</strong></label>
+                            <input class="form-control bg-dark text-light" type="text" value="{{ object.number }}" disabled readonly>
+                        </div>
+                    {% endif %}
+
                     <div class="mb-2">
                         <label class="form-label mb-0"><strong>Número de série:</strong></label>
                         <input class="form-control bg-dark text-light" type="text" value="{{ object.serie_number }}" disabled readonly>
                     </div>
+
                     <div class="mb-2">
-                        <label class="form-label mb-0"><strong>Marca:</strong></label>
+                        <label class="form-label mb-0"><strong>Fabricante:</strong></label>
                         <input class="form-control bg-dark text-light" type="text" value="{{ object.brand }}" disabled readonly>
                     </div>
+
+                    <div class="mb-2">
+                        <label class="form-label mb-0"><strong>Status:</strong></label>
+                        <input class="form-control bg-dark text-light" type="text" value="{{ object.get_status_display }}" disabled readonly>
+                    </div>
+
                     <div class="mb-2">
                         <label class="form-label mb-0"><strong>Valor:</strong></label>
                         <input class="form-control bg-dark text-light" type="text" value="{{ object.value|format_money }}" disabled readonly>
                     </div>
+
                     <div class="mb-2">
                         <label class="form-label mb-0"><strong>Observação:</strong></label>
                         <input class="form-control bg-dark text-light" type="text" value="{{ object.description }}" disabled readonly>
                     </div>
+
                 </div>
             </div>
 

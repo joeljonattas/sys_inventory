@@ -22,14 +22,17 @@ Sys_Inventory - Licenças
                     Informações da Licença
                 </div>
                 <div class="card-body">
-                    <div class="mb-2">
-                        <label class="form-label mb-0"><strong>Nome:</strong></label>
-                        <input class="form-control bg-dark text-light" type="text" value="{{ object.name }}" disabled readonly>
-                    </div>
 
-                    <div class="mb-2">
-                        <label class="form-label mb-0"><strong>Software:</strong></label>
-                        <input class="form-control bg-dark text-light" type="text" value="{{ object.get_software_display }}" disabled readonly>
+                    <div class="row mb-2">
+                        <div class="col">
+                            <label class="form-label mb-0"><strong>Nome:</strong></label>
+                            <input class="form-control bg-dark text-light" type="text" value="{{ object.name }}" disabled readonly>
+                        </div>
+    
+                        <div class="col">
+                            <label class="form-label mb-0"><strong>Software:</strong></label>
+                            <input class="form-control bg-dark text-light" type="text" value="{{ object.get_software_display }}" disabled readonly>
+                        </div>
                     </div>
 
                     <div class="mb-2">
@@ -37,9 +40,16 @@ Sys_Inventory - Licenças
                         <input class="form-control bg-dark text-light" type="text" value="{{ object.license_key }}" disabled readonly>
                     </div>
 
-                    <div class="mb-2">
-                        <label class="form-label mb-0"><strong>Tipo de Licença:</strong></label>
-                        <input class="form-control bg-dark text-light" type="text" value="{{ object.license_type }}" disabled readonly>
+                    <div class="row mb-2">
+                        <div class="col">
+                            <label class="form-label mb-0"><strong>Tipo de Licença:</strong></label>
+                            <input class="form-control bg-dark text-light" type="text" value="{{ object.license_type }}" disabled readonly>
+                        </div>
+
+                        <div class="col">
+                            <label class="form-label mb-0"><strong>Status:</strong></label>
+                            <input class="form-control bg-dark text-light" type="text" value="{{ object.get_status_display }}" disabled readonly>
+                        </div>
                     </div>
 
                     <div class="mb-2">
@@ -67,12 +77,7 @@ Sys_Inventory - Licenças
                             </div>
                         {% endif %}
                     </div>
-
-                    <div class="mb-2">
-                        <label class="form-label mb-0"><strong>Status:</strong></label>
-                        <input class="form-control bg-dark text-light" type="text" value="{{ object.get_status_display }}" disabled readonly>
-                    </div>
-
+                    
                     <div class="mb-2">
                         <label class="form-label mb-0"><strong>Colaborador Associado:</strong></label>
                         <input class="form-control bg-dark text-light" type="text" value="{{ object.assigned_to }}" disabled readonly>

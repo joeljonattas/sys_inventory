@@ -18,21 +18,30 @@
                 </div>
                 <div class="card-body">
                     <div class="mb-2">
+                        <label class="form-label mb-0"><strong>Nome:</strong></label>
+                        <input class="form-control bg-dark text-light" type="text" value="{{ object.name }}" disabled readonly>
+                    </div>
+
+                    <div class="mb-2">
                         <label class="form-label mb-0"><strong>Número:</strong></label>
                         <input class="form-control bg-dark text-light" type="text" value="{{ object.number.as_national }}" disabled readonly>
                     </div>
+
                     <div class="mb-2">
                         <label class="form-label mb-0"><strong>Operadora:</strong></label>
                         <input class="form-control bg-dark text-light" type="text" value="{{ object.operator }}" disabled readonly>
                     </div>
+
                     <div class="mb-2">
                         <label class="form-label mb-0"><strong>Status:</strong></label>
                         <input class="form-control bg-dark text-light" type="text" value="{{ object.get_status_display }}" disabled readonly>
                     </div>
+
                     <div class="mb-2">
                         <label class="form-label mb-0"><strong>Valor:</strong></label>
                         <input class="form-control bg-dark text-light" type="text" value="{{ object.value|format_money }}" disabled readonly>
                     </div>
+
                     <div class="mb-2">
                         <label class="form-label mb-0"><strong>Descrição:</strong></label>
                         <input class="form-control bg-dark text-light" type="text" value="{{ object.description }}" disabled readonly>
