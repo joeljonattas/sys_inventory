@@ -77,16 +77,30 @@ Sys_Inventory - Licenças
                             </div>
                         {% endif %}
                     </div>
-                    
-                    <div class="mb-2">
-                        <label class="form-label mb-0"><strong>Colaborador Associado:</strong></label>
-                        <input class="form-control bg-dark text-light" type="text" value="{{ object.assigned_to }}" disabled readonly>
-                    </div>
 
-                    <div class="mb-2">
-                        <label class="form-label mb-0"><strong>Descrição:</strong></label>
-                        <input class="form-control bg-dark text-light" type="text" value="{{ object.description }}" disabled readonly>
-                    </div>
+                    {% if object.assigned_to is None %}
+                        <div class="mb-2">
+                            <label class="form-label mb-0"><strong>Colaborador Associado:</strong></label>
+                            <input class="form-control bg-dark text-light" type="text" value="Não vinculado" disabled readonly>
+                        </div>
+                    {% else %}
+                        <div class="mb-2">
+                            <label class="form-label mb-0"><strong>Colaborador Associado:</strong></label>
+                            <input class="form-control bg-dark text-light" type="text" value="{{ object.assigned_to }}" disabled readonly>
+                        </div>
+                    {% endif %}
+
+                    {% if object.description is None %}
+                        <div class="mb-2">
+                            <label class="form-label mb-0"><strong>Descrição:</strong></label>
+                            <input class="form-control bg-dark text-light" type="text" value="" disabled readonly>
+                        </div>
+                    {% else %}
+                        <div class="mb-2">
+                            <label class="form-label mb-0"><strong>Descrição:</strong></label>
+                            <input class="form-control bg-dark text-light" type="text" value="{{ object.description }}" disabled readonly>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

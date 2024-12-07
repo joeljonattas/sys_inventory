@@ -8,6 +8,7 @@ from brands.models import Brand
 from licenses.models import License, LicenseType
 from printers.models import Printer
 from django.core.exceptions import ValidationError
+from datetime import datetime, timedelta
 
 class CollaboratorResource(resources.ModelResource):
     sector = fields.Field(
@@ -456,6 +457,7 @@ class PhoneNumberImportResource(resources.ModelResource):
         if number and Printer.objects.filter(number=number).exists():
             raise ValidationError(f"O número de série '{number}' já está cadastrado.")
 
+
 class LicenseResource(resources.ModelResource):
     status = fields.Field(
         attribute='status', 
@@ -535,6 +537,11 @@ class LicenseResource(resources.ModelResource):
         if 'softwares' in row and row['softwares'] in softwares_map:
             row['softwares'] = softwares_map[row['softwares']]
 
+
+def excel_date_to_date(excel_date):
+    base_date = datetime(1899, 12, 30)
+    return base_date + timedelta(days=excel_date)
+
 class LicenseImportResource(resources.ModelResource):
     status = fields.Field(
         attribute='status', 
@@ -595,7 +602,7 @@ class LicenseImportResource(resources.ModelResource):
     
     def dehydrate_software(self, license):
         return license.get_software_display()
-
+    
     def before_import_row(self, row, **kwargs):
         status_map = {v: k for k, v in License.STATUS_CHOICES}
         if 'status' in row and row['status'] in status_map:
@@ -607,12 +614,24 @@ class LicenseImportResource(resources.ModelResource):
 
         license_key = row.get('chave_licenca')
         if license_key and License.objects.filter(license_key=license_key).exists():
-            raise ValidationError(f"O número de série '{license_key}' já está cadastrado.")
+            raise ValidationError(f"A chave da licença '{license_key}' já está cadastrada.")
         
         if not row.get('data_compra'):
             row['data_compra'] = None
         if not row.get('data_expiracao'):
             row['data_expiracao'] = None
+
+        for field in ['data_compra', 'data_expiracao']:
+            if field in row and row[field]:
+                try:
+                    if isinstance(row[field], int) or isinstance(row[field], float):
+                        row[field] = excel_date_to_date(row[field]).date()
+                    else:
+                        row[field] = datetime.strptime(row[field], '%Y-%m-%d').date()
+                except Exception as e:
+                    raise ValidationError(f"Erro ao processar o campo '{field}': {e}")
+            else:
+                row[field] = None
 
 class PrinterResource(resources.ModelResource):
     status = fields.Field(

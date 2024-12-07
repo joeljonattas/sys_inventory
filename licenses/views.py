@@ -110,7 +110,7 @@ def export_data(request):
         file_format = request.POST['file-format']
         status = request.POST.get('stat')
         software = request.POST.get('software')
-        licenses_resource = LicenseImportResource()
+        licenses_resource = LicenseResource()
 
         if status:
             license_filter = License.objects.filter(status=status)
