@@ -18,7 +18,7 @@ Sys_Inventory - Colaboradores
     <div class="row d-flex justify-content-center mt-4">
         <div class="col-sm-4">
             <div class="card bg-dark shadow-detail text-light">
-                <div class="card-header fs-3 fw-semibold border-bottom border-black">
+                <div class="card-header fs-4 fw-semibold border-bottom border-black">
                     Informações pessoais
                 </div>
                 <div class="card-body">
@@ -50,7 +50,7 @@ Sys_Inventory - Colaboradores
             </div>
 
             <div class="card bg-dark shadow-detail text-light mt-3">
-                <div class="card-header fs-3 fw-semibold border-bottom border-black">
+                <div class="card-header fs-4 fw-semibold border-bottom border-black">
                     Equipamentos vinculados
                 </div>
                 <div class="card-body">
@@ -147,9 +147,9 @@ Sys_Inventory - Colaboradores
                                             {% endif %}
                                             <i class="bi bi-forward-fill"></i>
                                             {% if value.1 == 'None' %}
-                                                <strong>Não Vinculado</strong>
+                                                <strong>Não Vinculado</strong> <br>
                                             {% else %}
-                                                <strong>{{ value.1 }}</strong>
+                                                <strong>{{ value.1 }}</strong> <br>
                                             {% endif %}
                                         {% endfor %}
                                     {% else %}
