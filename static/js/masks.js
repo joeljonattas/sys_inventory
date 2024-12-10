@@ -18,7 +18,6 @@ $(document).ready(function(){
         }
     });
 
-    // Aplicando a máscara
     $('.mask-phone').mask('(00) 00000-0000');
 
     $('.form').on('submit', function(){

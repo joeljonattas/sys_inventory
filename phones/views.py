@@ -31,7 +31,6 @@ class PhonesListView(LoginRequiredMixin, ListView):
         category = self.request.GET.get('category')
         stat = self.request.GET.get('stat')
         
-        # Obtendo o termo de busca
         search_query = self.request.GET.get('search')
         
         if search_query:
@@ -196,7 +195,6 @@ class PhonesLinesListView(LoginRequiredMixin, ListView):
         stat = self.request.GET.get('stat')
         operator = self.request.GET.get('operator')
         
-        # Obtendo o termo de busca
         search_query = self.request.GET.get('search')
         
         if search_query:
@@ -340,7 +338,6 @@ class PhoneOperatorListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         
-        # Obtendo o termo de busca
         search_query = self.request.GET.get('search')
         
         if search_query:

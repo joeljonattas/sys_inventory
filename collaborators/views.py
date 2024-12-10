@@ -26,7 +26,6 @@ class CollaboratorsListView(LoginRequiredMixin, ListView):
         queryset = super().get_queryset()
         sector = self.request.GET.get('sector')
         
-        # Obtendo o termo de busca
         search_query = self.request.GET.get('search')
         
         if search_query:
@@ -131,7 +130,6 @@ class SectorsListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         
-        # Obtendo o termo de busca
         search_query = self.request.GET.get('search')
         
         if search_query:

@@ -1,7 +1,3 @@
-.baixo-div{
-    padding-top: 15px;
-}
-
 .card{
     border: none !important;
 }
@@ -24,12 +20,4 @@
 
 .form-select:focus{
     box-shadow: 0 0 0 0.2rem darkgray !important;
-}
-
-.sombra{
-    box-shadow: 0 0 0px rgba(0, 0, 0, 0.3);
-}
-
-.cima{
-    padding-top: 50px;
 }

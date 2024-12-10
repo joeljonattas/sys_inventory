@@ -19,7 +19,6 @@ class License(models.Model):
         ('adobe', 'Adobe Suite'),
         ('autocad', 'AutoCAD'),
         ('antivirus', 'Antivirus'),
-        # Adicione mais conforme necessário
     ]
 
     STATUS_CHOICES = [

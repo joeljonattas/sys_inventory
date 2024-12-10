@@ -1,15 +1,11 @@
-.baixo-div{
-    padding-top: 50px;
-}
-
 .bg-danger-white{
     background-color: #ec5353 !important;
 }
 
-.centralizar{
+.centralize{
     justify-content: center !important;
 }
 
-.cima{
+.top{
     padding-top: 50px;
 }

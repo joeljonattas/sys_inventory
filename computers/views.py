@@ -29,7 +29,6 @@ class ComputersListView(LoginRequiredMixin, ListView):
         category = self.request.GET.get('category')
         stat = self.request.GET.get('stat')
 
-        # Obtendo o termo de busca
         search_query = self.request.GET.get('search')
         
         if search_query:

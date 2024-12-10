@@ -25,7 +25,6 @@ class LicenseListView(LoginRequiredMixin, ListView):
         software_filter = self.request.GET.get('software')
         license_type = self.request.GET.get('license_type')
 
-        # Obtendo o termo de busca
         search_query = self.request.GET.get('search')
         
         if search_query:

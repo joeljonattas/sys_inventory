@@ -6,7 +6,7 @@ body {
   min-height: 100%;
 }
 
-.altura-header {
+.height-header {
   height: 6vh;
 }
 
@@ -18,11 +18,11 @@ body {
   padding-left: 15px;
 }
 
-.fundo{
+.background{
   background-color: lightgrey;
 }
 
-.sombra{
+.shadow{
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
@@ -30,7 +30,7 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-.tamanho{
+.size{
   min-height: calc(100vh - 6vh - 40px);
 }
 
@@ -61,4 +61,16 @@ body {
 
 btn-close{
   color: white !important;
+}
+
+.teal{
+  background-color: #008080;
+}
+
+.orange{
+  background-color: #0b6464;
+}
+
+.cyan{
+  background-color: #008080;
 }

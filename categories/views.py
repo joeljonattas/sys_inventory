@@ -19,7 +19,6 @@ class CategoriesListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         
-        # Obtendo o termo de busca
         search_query = self.request.GET.get('search')
         
         if search_query:
