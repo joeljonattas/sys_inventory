@@ -48,7 +48,7 @@ class ComputersForm(forms.ModelForm):
             'category': forms.Select(attrs={'class': 'form-select'}),
             'status': forms.Select(attrs={'class': 'form-select'}),
             'state': forms.Select(attrs={'class': 'form-select'}),
-            'inventory_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'inventory_number': forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
             'serie_number': forms.TextInput({'class': 'form-control'}),
             'cpu': forms.TextInput({'class': 'form-control'}),
             'memory_ram': forms.Select(attrs={'class': 'form-select'}),

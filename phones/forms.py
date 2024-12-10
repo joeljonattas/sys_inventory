@@ -3,6 +3,7 @@ from . import models
 from .models import PhoneNumber, PhoneOperator
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Submit
+from phonenumbers import format_number, PhoneNumberFormat
 
 
 class PhonesForm(forms.ModelForm):
@@ -50,7 +51,7 @@ class PhonesForm(forms.ModelForm):
             'number': forms.Select(attrs={'class': 'form-select'}),
             'status': forms.Select(attrs={'class': 'form-select'}),
             'state': forms.Select(attrs={'class': 'form-select'}),
-            'inventory_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'inventory_number': forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
             'category': forms.Select(attrs={'class': 'form-select'}),
             'value': forms.TextInput(attrs={'class': 'form-control mask-money'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
@@ -74,6 +75,10 @@ class PhonesLinesForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if self.instance and self.instance.number:
+            self.fields['number'].initial = format_number(
+                self.instance.number, PhoneNumberFormat.NATIONAL
+            )
 
         self.helper = FormHelper()
         self.helper.form_method = 'post'
@@ -106,7 +111,7 @@ class PhonesLinesForm(forms.ModelForm):
             'operator': forms.Select(attrs={'class': 'form-select'}),
             'status': forms.Select(attrs={'class': 'form-select'}),
             'value': forms.TextInput(attrs={'class': 'form-control mask-money'}),
-            'inventory_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'inventory_number': forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
         }
 

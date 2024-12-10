@@ -42,7 +42,7 @@ class PhoneNumber(models.Model):
                 self.inventory_number = "00001"
 
         if not self.name:
-            self.name = f'TF-{self.inventory_number}'
+            self.name = f'LT-{self.inventory_number}'
 
         super().save(*args, **kwargs)
     

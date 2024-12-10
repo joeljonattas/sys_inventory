@@ -49,6 +49,7 @@ class LicensesForm(forms.ModelForm):
             'license_type': forms.Select(attrs={'class': 'form-select'}),
             'category': forms.Select(attrs={'class': 'form-select'}),
             'purchase_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'inventory_number': forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
             'expiration_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'status': forms.Select(attrs={'class': 'form-select'}),
             'value': forms.TextInput(attrs={'class': 'form-control mask-money'}),

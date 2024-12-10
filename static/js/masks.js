@@ -11,7 +11,15 @@ onKeyPress: function(val, e, field, options) {
 $(document).ready(function(){
     $('.mask-money').mask("#.##0,00", {reverse: true});
 
-    $('.mask-phone').mask(SPMaskBehavior, spOptions);
+    $('.mask-phone').each(function () {
+        let value = $(this).val();
+        if (value.startsWith('+55')) {
+            $(this).val(value.replace('+55', '').trim()); // Remove o +55
+        }
+    });
+
+    // Aplicando a máscara
+    $('.mask-phone').mask('(00) 00000-0000');
 
     $('.form').on('submit', function(){
         var valorComVirgula = $('.mask-money').val();
