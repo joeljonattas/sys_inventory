@@ -30,6 +30,9 @@ class PhoneNumber(models.Model):
     inventory_number = models.CharField(max_length=20, blank=True, unique=True)
     description = models.TextField(blank=True, null=True, max_length=300)
 
+    class Meta:
+        ordering = ['status']
+
     def __str__(self):
         return str(self.number.as_national)
     

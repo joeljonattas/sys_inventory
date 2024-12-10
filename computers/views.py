@@ -114,12 +114,12 @@ def qr_code_view(request, pk):
 def export_data(request):
     if request.method == 'POST':
         file_format = request.POST['file-format']
-        status_id = request.POST.get('stat')
+        status = request.POST.get('stat')
         category_id = request.POST.get('category')
         computer_resource = ComputerResource()
 
-        if status_id:
-            computer_filter = models.Computer.objects.filter(status__id=status_id)
+        if status:
+            computer_filter = models.Computer.objects.filter(status=status)
         elif category_id:
             computer_filter = models.Computer.objects.filter(category__id=category_id)
         else:
