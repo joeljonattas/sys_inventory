@@ -80,7 +80,7 @@ Sys_Inventory - Impressoras
                 </div>
 
                 <button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExport" aria-controls="offcanvasExport"><i class="bi bi-upload"></i> Exportar</button>
-                <div class="offcanvas offcanvas-end w-50" tabindex="-1" id="offcanvasExport" aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExport" aria-labelledby="offcanvasRightLabel">
 
                     <div class="offcanvas-header">
                       <h5 class="offcanvas-title" id="offcanvasRightLabel">Exportar</h5>
@@ -92,10 +92,10 @@ Sys_Inventory - Impressoras
                             {% csrf_token %}
                             <p class="mb-1">Filtrar</p>
                             <div class="input-group mb-3">
-                                <select class="form-select" name="category">
-                                    <option value="" {% if not request.GET.category %} selected {% endif %}>Categorias</option>
-                                    {% for category in categories %}
-                                        <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:'s' %} selected {% endif %}>{{ category.name }}</option>
+                                <select class="form-select" name="location">
+                                    <option value="" {% if not request.GET.location %} selected {% endif %}>Localização</option>
+                                    {% for location in locations %}
+                                        <option value="{{ location.id }}" {% if request.GET.location == location.id|stringformat:'s' %} selected {% endif %}>{{ location.name }}</option>
                                     {% endfor %}
                                 </select>
                                 <select class="form-select" name="stat">

@@ -274,12 +274,12 @@ class PhonesLinesDeleteView(LoginRequiredMixin, DeleteView):
 def export_data_phone_lines(request):
     if request.method == 'POST':
         file_format = request.POST['file-format']
-        status_id = request.POST.get('stat')
+        status = request.POST.get('stat')
         operator_id = request.POST.get('operator')
         phone_line_resource = PhoneNumberResource()
 
-        if status_id:
-            phone_line_filter = models.PhoneNumber.objects.filter(status__id=status_id)
+        if status:
+            phone_line_filter = models.PhoneNumber.objects.filter(status=status)
         elif operator_id:
             phone_line_filter = models.PhoneNumber.objects.filter(operator__id=operator_id)
         else:

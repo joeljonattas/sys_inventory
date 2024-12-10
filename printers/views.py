@@ -115,13 +115,13 @@ def export_data(request):
     if request.method == 'POST':
         file_format = request.POST['file-format']
         status = request.POST.get('stat')
-        category_id = request.POST.get('category')
+        location_id = request.POST.get('location')
         computer_resource = PrinterResource()
 
         if status:
             printer_filter = Printer.objects.filter(status=status)
-        elif category_id:
-            printer_filter = Printer.objects.filter(category__id=category_id)
+        elif location_id:
+            printer_filter = Printer.objects.filter(location__id=location_id)
         else:
             printer_filter = Printer.objects.all()
 

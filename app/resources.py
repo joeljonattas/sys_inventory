@@ -395,12 +395,21 @@ class PhoneNumberResource(resources.ModelResource):
     number = fields.Field(
         column_name='Nº de Telefone',
         attribute='number',
-        widget=ForeignKeyWidget(PhoneNumber, field='number')
+    )
+
+    name = fields.Field(
+        column_name='Nome',
+        attribute='name',
+    )
+
+    inventory_number = fields.Field(
+        column_name='Nº de Inventário',
+        attribute='inventory_number'
     )
 
     class Meta:
         model = PhoneNumber
-        fields = ('number', 'status', 'operator', 'value', 'description')
+        fields = ('name', 'number', 'status', 'inventory_number', 'operator', 'value', 'description')
         import_id_fields = ('number',)
 
     def dehydrate_status(self, phone_number):
